@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.plugin.Plugin;
 
 public class Korin extends KorinPlugin
 {
@@ -22,6 +23,15 @@ public class Korin extends KorinPlugin
 	public Korin()
 	{
 		Korin.i = this;
+	}
+	
+	// ========== //
+	// JAVAPLUGIN //
+	// ========== //
+	
+	public Plugin getPlugin()
+	{
+		return this;
 	}
 	
 	// ================ //
