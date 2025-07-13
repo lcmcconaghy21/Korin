@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.command.CommandSender;
 
 import com.lcmcconaghy.java.korin.IKorinPlugin;
+import com.lcmcconaghy.java.korin.command.argument.IArgument;
 
 public abstract class KorinCommand implements IKorinCommand
 {
@@ -29,6 +31,7 @@ public abstract class KorinCommand implements IKorinCommand
 	// Korin fields
 	protected ArrayList<String> commandAliases = new ArrayList<String>();
 	protected LinkedHashMap<String, IKorinCommand> subCommands = new LinkedHashMap<String, IKorinCommand>();
+	protected LinkedList<IArgument<?>> arguments = new LinkedList<IArgument<?>>();
 	
 	// ======== //
 	// ALIASING //
