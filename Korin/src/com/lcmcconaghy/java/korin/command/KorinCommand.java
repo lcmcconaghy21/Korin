@@ -205,7 +205,7 @@ public abstract class KorinCommand implements IKorinCommand
 	{
 		if (!hasPermission(sender))
 		{
-            sender.sendMessage("§cYou don't have permission to use this command!");
+            msg("<c>You don't have permission to use this command!");
             return true;
         }
 
@@ -233,8 +233,8 @@ public abstract class KorinCommand implements IKorinCommand
             ArgumentAbstract<?> argument = arguments.get( keyArray[i] );
             if (! argument.isValid( args[i] ) )
             {
-                sender.sendMessage("§cInvalid argument for " + argument.getName() + ": " + args[i]);
-                sender.sendMessage("§cUsage: " + getUsage());
+                msg("<c>Invalid argument for " + argument.getName() + ": " + args[i]);
+                msg("<c>Usage: " + getUsage());
                 return false;
             }
         }
@@ -253,6 +253,17 @@ public abstract class KorinCommand implements IKorinCommand
         }
 
         return run();
+	}
+	
+	// ========= //
+	// MESSAGING //
+	// ========= //
+	
+	public void msg(String arg0)
+	{
+		String msg = new Message(arg0).format().toString();
+		
+		this.sender.sendMessage(msg);
 	}
 	
 	// ======== //
