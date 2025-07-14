@@ -220,7 +220,8 @@ public abstract class KorinCommand implements IKorinCommand
             return subCommand.execute();
         }
 
-        if ( ! subCommands.isEmpty() ) {
+        if ( ! subCommands.isEmpty() )
+        {
             return run();
         }
         
@@ -253,4 +254,23 @@ public abstract class KorinCommand implements IKorinCommand
 
         return run();
 	}
+	
+	// ======== //
+	// RUNNABLE //
+	// ======== //
+		
+	public boolean run()
+	{
+		return false;
+	}
+	
+	// =========== //
+	// SUBCOMMANDS //
+	// =========== //
+	
+	public void addSubCommand(KorinCommand arg0)
+	{
+		this.subCommands.put(arg0.getLabel(), arg0);
+	}
+	
 }
