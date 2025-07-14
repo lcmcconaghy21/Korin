@@ -25,11 +25,14 @@ public abstract class KorinCommand implements IKorinCommand
 	protected CommandSender sender;
 	protected String[] args;
 	
-	protected final String commandLabel;
+	protected IKorinPlugin plugin;
+	protected KorinCommand parent;
+	
+	protected String commandLabel;
 	protected String description;
 	protected String usage;
-	protected final KorinSpigotCommand spigotCommand;
-	protected final String permission;
+	protected KorinSpigotCommand spigotCommand;
+	protected String permission;
 	
 	// Korin fields
 	protected ArrayList<String> commandAliases = new ArrayList<String>();
@@ -127,6 +130,7 @@ public abstract class KorinCommand implements IKorinCommand
 		
 		this.spigotCommand = new KorinSpigotCommand( this );
 		
+		this.plugin = plugin;
 		this.permission = plugin.getPlugin().getDescription().getMain().substring(0, plugin.getPlugin().getDescription().getMain().lastIndexOf('.'))
 				          + commandLabel.toLowerCase();
 	}
@@ -140,8 +144,8 @@ public abstract class KorinCommand implements IKorinCommand
         if (!hasPermission(sender)) {
             return Collections.emptyList();
         }
-
-        if (args.length == 1) {
+        
+        if (args.length <= 1) {
             return subCommands.keySet().stream()
                     .filter(name -> name.startsWith(args[0].toLowerCase()))
                     .filter(name -> {
@@ -288,6 +292,7 @@ public abstract class KorinCommand implements IKorinCommand
 	{
 		for (String alias : arg0.getAliases())
 		{
+			arg0.parent = this;
 			this.subCommands.put(alias, arg0);
 		}
 	}

@@ -117,12 +117,11 @@ public class Message
 		 return complete;
 	}
 	
-	public Message data(String arg0, String arg1, String arg2, String...args)
+	public Message data(String arg0, String...args)
 	{
 		if (args.length % 2 != 0) throw new IllegalStateException();
 		
-		String ret = "<e>======={ <d><l>"+ arg0 + " <e>}=======<f>\n";
-		ret += "<e>" + arg1 + ": <b>" + arg2 + "<r><f>";
+		String ret = "<e>======={ <d><l>"+ arg0 + " <e>}=======<f>";
 		
 		for (int i = 0; i < (args.length/2); i++)
 		{
@@ -135,6 +134,13 @@ public class Message
 		this.message = ret;
 		
 		return this;
+	}
+	
+	public Message append(String arg0)
+	{
+		this.message += arg0;
+		
+		return this.format();
 	}
 	
 	// ========= //
