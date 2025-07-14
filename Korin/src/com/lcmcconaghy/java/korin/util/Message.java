@@ -121,7 +121,7 @@ public class Message
 	{
 		if (args.length % 2 != 0) throw new IllegalStateException();
 		
-		String ret = "<e>======={ <d><l>"+ arg0 + "<e>}=======\n";
+		String ret = "<e>======={ <d><l>"+ arg0 + " <e>}=======<f>\n";
 		ret += "<e>" + arg1 + ": <b>" + arg2;
 		
 		for (int i = 0; i < (args.length/2); i++)
@@ -129,7 +129,7 @@ public class Message
 			int keyPos = i*2;
 			int objectPos = i*2+1;
 			
-			ret += "\n<e>" + args[keyPos] + ": <b>" + args[objectPos];
+			ret += "\n<e>" + args[keyPos] + ": <b>" + args[objectPos] +"<r><f>";
 		}
 		
 		this.message = ret;
