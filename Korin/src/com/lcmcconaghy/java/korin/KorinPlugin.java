@@ -48,6 +48,14 @@ public abstract class KorinPlugin extends JavaPlugin implements IKorinPlugin
 		return Korin.get().commandMap.register(cmd.getLabel(), cmd.getSpigotCommand());
 	}
 	
+	public void registerCommands(KorinCommand... commands)
+	{
+		for (KorinCommand cmd : commands)
+		{
+			registerCommand(cmd);
+		}
+	}
+	
 	// ====== //
 	// LOGGER //
 	// ====== //
