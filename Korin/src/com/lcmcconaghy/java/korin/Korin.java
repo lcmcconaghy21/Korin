@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 
+import com.lcmcconaghy.java.korin.command.KorinCommand;
+
 public class Korin extends KorinPlugin
 {
 	
@@ -72,6 +74,14 @@ public class Korin extends KorinPlugin
 	public SimpleCommandMap getCommandMap()
 	{
 		return this.commandMap;
+	}
+	
+	public void registerCommands(KorinCommand... commands)
+	{
+		for (KorinCommand cmd : commands)
+		{
+			this.commandMap.register(cmd.getLabel(), cmd.getLabel(), cmd.getSpigotCommand());
+		}
 	}
 	
 	// ================= //
