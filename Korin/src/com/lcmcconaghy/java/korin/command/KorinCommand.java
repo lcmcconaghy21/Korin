@@ -246,7 +246,7 @@ public abstract class KorinCommand implements IKorinCommand
             {
                 if (!arguments.get( keyArray[i] ).isOptional())
                 {
-                    sender.sendMessage("§cMissing required argument: " + arguments.get( keyArray[i] ).getName());
+                    sender.sendMessage("<c>Missing required argument: " + arguments.get( keyArray[i] ).getName());
                     return false;
                 }
             }
@@ -281,7 +281,10 @@ public abstract class KorinCommand implements IKorinCommand
 	
 	public void addSubCommand(KorinCommand arg0)
 	{
-		this.subCommands.put(arg0.getLabel(), arg0);
+		for (String alias : arg0.getAliases())
+		{
+			this.subCommands.put(alias, arg0);
+		}
 	}
 	
 }
