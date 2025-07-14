@@ -8,20 +8,21 @@ public abstract class ArgumentAbstract<T> implements IArgument<T>
 	// ====== //
 	
 	protected boolean optional = false;
+	protected boolean concat = false;
 	protected String identifier;
 	
-	// ======== //
-	// OPTIONAL //
-	// ======== //
+	// ============= //
+	// CONCATENATION //
+	// ============= //
 	
-	public void toggleOptional(boolean arg0)
+	public void toggleConcat(boolean arg0)
 	{
-		this.optional = arg0;
+		this.concat = arg0;
 	}
 	
-	public boolean isOptional()
+	public boolean shouldConcat()
 	{
-		return this.optional;
+		return this.concat;
 	}
 	
 	// ====== //
@@ -36,6 +37,20 @@ public abstract class ArgumentAbstract<T> implements IArgument<T>
 	public String getName()
 	{
 		return this.identifier;
+	}
+	
+	// ======== //
+	// OPTIONAL //
+	// ======== //
+		
+	public void toggleOptional(boolean arg0)
+	{
+		this.optional = arg0;
+	}
+		
+	public boolean isOptional()
+	{
+		return this.optional;
 	}
 	
 }

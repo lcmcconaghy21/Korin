@@ -36,6 +36,8 @@ public abstract class KorinCommand implements IKorinCommand
 	protected LinkedHashMap<String, IKorinCommand> subCommands = new LinkedHashMap<String, IKorinCommand>();
 	protected LinkedHashMap<String, ArgumentAbstract<?>> arguments = new LinkedHashMap<String, ArgumentAbstract<?>>();
 	
+	protected int argTracker = -1;
+	
 	// ======== //
 	// ALIASING //
 	// ======== //
@@ -71,6 +73,39 @@ public abstract class KorinCommand implements IKorinCommand
 		this.arguments.put(arg0, target);
 		
 		return target;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T readArgument(int position)
+	{
+		String[] keys = this.arguments.keySet().toArray( new String[this.arguments.keySet().size()] );
+		ArgumentAbstract<?> argument = this.arguments.get( keys[position] );
+		
+		if (argument.shouldConcat())
+		{
+			String parsedText = "";
+			
+			for (int i = this.argTracker; i<this.args.length; i++)
+			{
+				parsedText += this.args[i];
+			}
+			
+			return (T) argument.read(parsedText);
+		}
+		
+		return (T) argument.read( this.args[ position ] );
+	}
+	
+	public <T> T readArgument()
+	{
+		if (this.argTracker >= this.args.length)
+		{
+			this.argTracker = -1;
+		}
+		
+		this.argTracker++;
+		
+		return readArgument( this.argTracker );
 	}
 	
 	// =========== //
