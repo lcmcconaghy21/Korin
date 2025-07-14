@@ -1,6 +1,7 @@
 package com.lcmcconaghy.java.korin.command.defaults;
 
 import com.lcmcconaghy.java.korin.Korin;
+import com.lcmcconaghy.java.korin.command.HelpCommand;
 import com.lcmcconaghy.java.korin.command.KorinCommand;
 
 public class CmdKorin extends KorinCommand
@@ -21,6 +22,7 @@ public class CmdKorin extends KorinCommand
 	{
 		super(Korin.get(), "korin", "kr");
 		
+		this.addSubCommand(new HelpCommand( this ));
 		this.addSubCommand(CmdKorinVersion.get());
 	}
 }

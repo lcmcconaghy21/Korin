@@ -2,6 +2,7 @@ package com.lcmcconaghy.java.korin.command;
 
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -65,6 +66,18 @@ public class KorinSpigotCommand extends BukkitCommand implements TabCompleter
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args)
 	{
 		return this.command.tabComplete(sender, args);
+	}
+	
+	@Override
+	public List<String> tabComplete(CommandSender sender, String alias, String[] args)
+	{
+		return onTabComplete(sender, this, alias, args);
+	}
+	
+	@Override
+	public List<String> tabComplete(CommandSender sender, String alias, String[] args, Location location)
+	{
+		return onTabComplete(sender, this, alias, args);
 	}
 	
 }
