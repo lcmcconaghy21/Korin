@@ -39,6 +39,8 @@ public class KorinSpigotCommand extends BukkitCommand implements TabCompleter
 	{
 		adjustExecution(sender, args);
 		
+		this.command.execute();
+		
 		return true;
 	}
 	
