@@ -54,6 +54,11 @@ public class Message
 		this.message = arg0;
 	}
 	
+	public Message()
+	{
+		this.message = "";
+	}
+	
 	// ========== //
 	// FORMATTING //
 	// ========== //
@@ -110,6 +115,26 @@ public class Message
 		 complete += "<b>" + TimeUnit.MILLISECONDS.toSeconds(millis) + "<e> second(s)";
 		 
 		 return complete;
+	}
+	
+	public Message data(String arg0, String arg1, String arg2, String...args)
+	{
+		if (args.length % 2 != 0) throw new IllegalStateException();
+		
+		String ret = "<e>======={ <d><l>"+ arg0 + "<e>}=======\n";
+		ret += "<e>" + arg1 + ": <b>" + arg2;
+		
+		for (int i = 0; i < (args.length/2); i++)
+		{
+			int keyPos = i*2;
+			int objectPos = i*2+1;
+			
+			ret += "\n<e>" + args[keyPos] + ": <b>" + args[objectPos];
+		}
+		
+		this.message = ret;
+		
+		return this;
 	}
 	
 	// ========= //

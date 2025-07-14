@@ -266,6 +266,11 @@ public abstract class KorinCommand implements IKorinCommand
 		this.sender.sendMessage(msg);
 	}
 	
+	public void msg(Message arg0)
+	{
+		msg( arg0.toString() );
+	}
+	
 	// ======== //
 	// RUNNABLE //
 	// ======== //
