@@ -268,7 +268,7 @@ public abstract class KorinCommand implements IKorinCommand
 	
 	public void msg(Message arg0)
 	{
-		msg( arg0.toString() );
+		msg( arg0.format().toString() );
 	}
 	
 	// ======== //
