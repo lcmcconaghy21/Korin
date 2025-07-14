@@ -122,7 +122,7 @@ public class Message
 		if (args.length % 2 != 0) throw new IllegalStateException();
 		
 		String ret = "<e>======={ <d><l>"+ arg0 + " <e>}=======<f>\n";
-		ret += "<e>" + arg1 + ": <b>" + arg2;
+		ret += "<e>" + arg1 + ": <b>" + arg2 + "<r><f>";
 		
 		for (int i = 0; i < (args.length/2); i++)
 		{
