@@ -1,18 +1,20 @@
 package com.lcmcconaghy.java.korin.command;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.command.CommandSender;
 
 import com.lcmcconaghy.java.korin.IKorinPlugin;
+import com.lcmcconaghy.java.korin.command.argument.ArgumentAbstract;
 import com.lcmcconaghy.java.korin.command.argument.IArgument;
+import com.lcmcconaghy.java.korin.util.Message;
 
 public abstract class KorinCommand implements IKorinCommand
 {
@@ -25,13 +27,14 @@ public abstract class KorinCommand implements IKorinCommand
 	
 	protected final String commandLabel;
 	protected String description;
+	protected String usage;
 	protected final KorinSpigotCommand spigotCommand;
 	protected final String permission;
 	
 	// Korin fields
 	protected ArrayList<String> commandAliases = new ArrayList<String>();
 	protected LinkedHashMap<String, IKorinCommand> subCommands = new LinkedHashMap<String, IKorinCommand>();
-	protected LinkedList<IArgument<?>> arguments = new LinkedList<IArgument<?>>();
+	protected LinkedHashMap<String, ArgumentAbstract<?>> arguments = new LinkedHashMap<String, ArgumentAbstract<?>>();
 	
 	// ======== //
 	// ALIASING //
@@ -45,6 +48,29 @@ public abstract class KorinCommand implements IKorinCommand
 	public String getLabel()
 	{
 		return this.commandAliases.get(0);
+	}
+	
+	// ========= //
+	// ARGUMENTS //
+	// ========= //
+	
+	public IArgument<?> addArgument(String arg0, Class<ArgumentAbstract<?>> arg1)
+	{
+		ArgumentAbstract<?> target = null;
+		
+		try
+		{
+			target = arg1.getConstructor().newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e)
+		{
+			e.printStackTrace();
+		}
+		
+		this.arguments.put(arg0, target);
+		
+		return target;
 	}
 	
 	// =========== //
@@ -122,6 +148,19 @@ public abstract class KorinCommand implements IKorinCommand
 		return arg0.hasPermission(permission);
 	}
 	
+	// ===== //
+	// USAGE //
+	// ===== //
+	
+	public String getUsage()
+	{
+		if (this.usage != null) return this.usage;
+		
+		this.usage = new Message("<e>/" + this.getLabel() + " ").toString();
+		
+		return this.usage;
+	}
+	
 	// ========= //
 	// EXECUTION //
 	// ========= //
@@ -129,22 +168,54 @@ public abstract class KorinCommand implements IKorinCommand
 	@Override
 	public boolean execute()
 	{
-		if (! hasPermission(sender) ) 
+		if (!hasPermission(sender))
 		{
             sender.sendMessage("§cYou don't have permission to use this command!");
             return true;
         }
 
-        if (args.length > 0 && subCommands.containsKey(args[0].toLowerCase()))
+        if ( args.length > 0 && subCommands.containsKey( args[0].toLowerCase() ) )
         {
-            KorinCommand subCommand = (KorinCommand) subCommands.get(args[0].toLowerCase());
-            
+            KorinCommand subCommand = (KorinCommand) subCommands.get( args[0].toLowerCase() );
             String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            
+            subCommand.sender = sender;
             subCommand.args = subArgs;
             
             return subCommand.execute();
         }
 
-        return this.spigotCommand.execute(sender, this.commandLabel, args);
+        if ( ! subCommands.isEmpty() ) {
+            return run();
+        }
+        
+        String[] keyArray = new String[arguments.size()];
+        
+        // Validate arguments if no subcommands
+        for (int i = 0; i < arguments.size() && i < args.length; i++)
+        {
+            ArgumentAbstract<?> argument = arguments.get( keyArray[i] );
+            if (! argument.isValid( args[i] ) )
+            {
+                sender.sendMessage("§cInvalid argument for " + argument.getName() + ": " + args[i]);
+                sender.sendMessage("§cUsage: " + getUsage());
+                return false;
+            }
+        }
+
+        // Check if required arguments are missing
+        if (args.length < arguments.size())
+        {
+            for (int i = args.length; i < arguments.size(); i++)
+            {
+                if (!arguments.get( keyArray[i] ).isOptional())
+                {
+                    sender.sendMessage("§cMissing required argument: " + arguments.get( keyArray[i] ).getName());
+                    return false;
+                }
+            }
+        }
+
+        return run();
 	}
 }
